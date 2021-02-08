@@ -14,11 +14,15 @@ export const drizzleWeb3Middleware = (drizzleWeb3) => (store) => (next) => (
   if (type === 'APP_READY') {
     // eslint-disable-next-line no-param-reassign
     const apiKey = process.env.ETHERSCAN_API_KEY;
-    // const provider = process.env.WEB3_PROVIDER_HTTPS;
+    const provider = process.env.WEB3_PROVIDER_HTTPS;
 
-    console.log(action.web3);
+    const providerKey =
+      process.env.USE_LOCAL_RPC === 'TRUE'
+        ? { web3: action.web3 }
+        : { provider };
+
     const batchCall = new BatchCall({
-      web3: action.web3,
+      ...providerKey,
       etherscan: {
         apiKey,
       },
